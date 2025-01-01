@@ -1,157 +1,151 @@
-<?php include('navbar.php'); ?>
-         <div id="carouselExampleIndicators" class="carousel slide">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-                    aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                    aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                    aria-label="Slide 3"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
-                    aria-label="Slide 4"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4"
-                aria-label="Slide 5"></button>
-            </div>
-            <div class="carousel-inner w-100 h-50 mb-3">
-                <div class="carousel-item active">
-                    <img src="image/slide12.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="image/slide4.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="image/slide3.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="image/slide2.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="image/slide11.jpg" class="d-block w-100 h-auto" alt="...">
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-     <div class="container-fluid p-5">
-        <div class="row mb-3">
-            <h1 class="text-center">Blog</h1>
-            <?php 
-                $select="select * from tblblog order by idblog desc";
-                $res=mysqli_query($con,$select);
-                while($row=mysqli_fetch_assoc($res)){
-            ?>
-            <div class="col-md-3 col-sm-12 pt-3 text-center ">
-                <h3 class="text-center"><?php echo $row['blogtitle'] ?></h3>
-                <hr>
-                <img src="admin/<?php echo $row['blogimg'] ?>" alt="" class="img-fluid">
-                <hr>
-                <p style="text-indent: 50px;"><?php echo $row['blogdesc'] ?></p>
-            </div>
-            <?php } ?>
-        </div>
-     </div>
-     <div class="container-fluid p-5 bg-primary text-white">
-        <div class="row mb-3">
-            <h1 class="text-center">About Us</h1>
-            <hr>
-            <?php 
-                $select="select * from tblaboutus order by idabout desc";
-                $res=mysqli_query($con,$select);
-                while($row=mysqli_fetch_assoc($res)){
-            ?>
-            <div class="col-md-4 col-sm-12 p-5">
-                <img src="admin/<?php echo $row['companylogo'] ?>" alt="" class="img-fluid">
-            </div>
-            <div class="col-md-8 col-sm-12">
-                <h3 class="text-center"><?php echo $row['companyname'] ?></h2>
-                <p style="text-indent: 50px;"><?php echo $row['companydesc'] ?></p>
-            </div>
-            <?php } ?>
-        </div>
-    </div>
-    <div class="container-fluid p-3 fade show bg-light">
-        <div class="row ">
-            <h1 class="text-center">specialties</h1>
-            <?php 
-                $select="select * from tblspecialties order by id asc";
-                $res=mysqli_query($con,$select);
-                while($row=mysqli_fetch_assoc($res)){
-            ?>
-            <div class="col-md-3 col-sm-12 mt-3 text-center">
-                <h3 class="text-center"><?php echo $row['specialtiestitle']; ?></h3>
-                <hr>
-                <p><?php echo substr($row['specialtiesdesc'],0,350)."..."; ?></p>
-                <a href="specialties.php" class="btn btn-primary mx-auto"><i class="fa fa-list"></i> More Info</a>
-            </div>
-            <?php } ?>
-         </div>
-    </div>
-    <div class="container-fluid p-3 bg-primary">
-        <div class="row">
-            <h1 class="text-center text-white">Doctors</h1>
-            <?php 
-                    $select="select * from tbldoctor id where category='More'";
-                    $res=mysqli_query($con,$select);
-                    while($row=mysqli_fetch_assoc($res)){
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body{
+         background-image:url("https://assets-global.website-files.com/624629e0591bdc3b300cb644/628d1e2f335abe5b6f34674b_healthcare-v2%20(1).jpg")
+        }
+    </style>
+</head>
+<body>
+    <?php 
+        include_once('../connection.php');
+        if(isset($_POST['login'])){
+            $username=$_POST['username'];
+            $password=$_POST['password'];
+            $sqlquery="select * from dimuser where username='".$username."' and password='".$password."'";
+            $res=mysqli_query($con,$sqlquery);
+            if(mysqli_num_rows($res)>0){
+                $row=mysqli_fetch_assoc($res);
+                $_SESSION['id']=$row['id'];
+                $_SESSION['username']=$row['username'];
+                $otp=rand(100000,999999);
+                $update="update dimuser set otp='".$otp."' where id='".$row['id']."'";
+                mysqli_query($con,$update);
+                $_SESSION['otp']=$otp;
+                echo "<script> alert('Login Successfully.');</script>";
                 ?>
-            <div class="col-md-3 col-sm-6 mb-sm-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                        <img src="image/user.png" class="img-fluid mx-auto d-block" style="width:100px;height:100px;">
-                            <h5 class="card-title"><?php echo $row['doctorname']; ?></h5>
-                            <p class="card-text">
-                            <?php echo $row['education']; ?></p>
-                            <p class="card-text">
-                            <?php echo $row['experience']; ?></p>
-                            <p class="card-text">
-                            <?php echo $row['languagesspoken']; ?></p>
-                            <a class="btn btn-success" href="appointment.php"><i class="fa fa-stethoscope"></i> Appointment Now</a>
+                <script>
+                    $(document).ready(function() {
+                        $('#exampleModal').modal('show');
+                    });
+                 </script>
+                <?php
+            }else{
+                echo "<script> alert('Your Username & Password Not Match. Please try Again.');</script>";
+                echo "<script> window.location='index.php';</script>";
+            }
+        }
+    ?>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+      <div class="modal-dialog modal-md ">
+        <div class="modal-content" style="width: 600px; border-radius: 50px; " >
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">OTP Verification</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+                <form action="otpchk.php" method="post">
+                    <div class="row">
+                        <h6 class="text-center">OTP send on +9192xxxx1630</h6>
+                        <h6 class="text-center">OTP : <?php echo $_SESSION['otp']; ?></h6>
+                        <div class="col-12 p-5 ">
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <div class="input-group">
+                                        <label for="" class="input-group-text"><i class="fa fa-key"></i></label>
+                                        <input type="Password" name="otp" class="form-control" id="otp" placeholder="Enter OTP">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="check11" name="check11" value="something" onclick="showpasswords()">
+                                        <label class="form-check-label" for="check1">Show OTP</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary" name="checkotp">Verify</button>
+                                    <button type="reset" class="btn btn-warning">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+           </div>
+        </div>
+      </div>
+    </div>
+    <div class="container shadow mt-5 mx-auto p-3" style="width: 500px;border-radius: 50px;">
+        <form action="" method="post">
+            <div class="row">
+                <h1 class="text-center">Admin Login</h1>
+                <div class="col-12 p-5 ">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="input-group">
+                                <label for="" class="input-group-text"><i class="fa fa-user"></i></label>
+                                <input type="text" name="username" class="form-control" id="username" placeholder="Enter Username">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="input-group">
+                                <label for="" class="input-group-text"><i class="fa fa-key"></i></label>
+                                <input type="Password" name="password" class="form-control" id="password" placeholder="Enter Password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="check1" name="check1" value="something" onclick="showpassword()">
+                                <label class="form-check-label" for="check1">Show Password</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary" name="login">Login</button>
+                            <button type="reset" class="btn btn-warning">Reset</button>
                         </div>
                     </div>
                 </div>
-            <?php } ?>
-            
-        </div>
-    </div>
-    <div class="container-fluid p-3 bg-light">
-        <h1 class="text-center">Our Images</h1>
-        <hr>
-        <div class="row">
-        <?php 
-                $select="select * from tblgallery id where category='image' limit 6";
-                $res=mysqli_query($con,$select);
-                while($row=mysqli_fetch_assoc($res)){
-            ?>
-            <div class="col-md-2 col-sm-6 mb-sm-3">
-                <img src="admin/<?php echo $row['logo']; ?>" class="img-fluid img-thumbnail w-100 h-100" alt="...">
             </div>
-            <?php } ?>
-         </div>
-        <h1 class="text-center">Our Videos</h1>
-        <hr>
-        <div class="row mb-3">
-        <?php 
-                $select="select * from tblgallery id where category='video'";
-                $res=mysqli_query($con,$select);
-                while($row=mysqli_fetch_assoc($res)){
-            ?>
-            <div class="col-md-3 col-sm-6 mb-sm-3">
-                <p>
-                <iframe width="100%" height="100%" src="<?php echo $row['documentry']; ?>"
-                title="YouTube video player" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
-                    </p>
-            </div>
-            <?php } ?>
-         </div>
+        </form>
     </div>
-    <?php include('footer.php'); ?>
+    <script>
+        function showpasswords() {
+            var x = document.getElementById("otp");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+        function showpassword() {
+            var x = document.getElementById("password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+</body>
+</html>
