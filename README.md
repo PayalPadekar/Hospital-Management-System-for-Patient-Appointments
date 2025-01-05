@@ -1,1 +1,2 @@
 # Hospital-Management-System-for-Patient-Appointment
+This project is a Hospital Management System focused on managing patient appointments. It streamlines the scheduling process by allowing patients to book, update, and cancel appointments with ease. The system also helps healthcare providers manage their schedules, view patient details, and track appointment statuses efficiently. Designed to improve operational efficiency and enhance patient care.
